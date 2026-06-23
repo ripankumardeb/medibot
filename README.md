@@ -10,3 +10,5 @@
 #conda activate medibot
 
 #pip install -r requirements.txt
+
+#794285266297.dkr.ecr.ap-southeast-2.amazonaws.com/medibot
