@@ -6,9 +6,9 @@ from src.prompt import system_prompt
 
 from langchain_pinecone import PineconeVectorStore
 from langchain_ollama import ChatOllama
-from langchain.chains import create_retrieval_chain
-from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.output_parsers import StrOutputParser
+from langchain_core.runnables import RunnablePassthrough
 
 import os
 import logging
@@ -52,7 +52,7 @@ if OPENAI_API_KEY:
 
 
 # ---------------------------------------------------------
-# RAG Setup
+# RAG Setup (Modern LCEL — Python 3.14 compatible)
 # ---------------------------------------------------------
 
 INDEX_NAME = "medical-chatbot"
@@ -72,9 +72,7 @@ docsearch = PineconeVectorStore.from_existing_index(
 
 retriever = docsearch.as_retriever(
     search_type="similarity",
-    search_kwargs={
-        "k": 3
-    }
+    search_kwargs={"k": 3}
 )
 
 
@@ -88,20 +86,21 @@ chat_model = ChatOllama(
 prompt = ChatPromptTemplate.from_messages(
     [
         ("system", system_prompt),
-        ("human", "{input}")
+        ("human", "{input}"),
     ]
 )
 
 
-question_answer_chain = create_stuff_documents_chain(
-    chat_model,
-    prompt
-)
+def format_docs(docs):
+    return "\n\n".join(doc.page_content for doc in docs)
 
 
-rag_chain = create_retrieval_chain(
-    retriever,
-    question_answer_chain
+# LCEL chain: retrieve → format → prompt → llm → parse
+rag_chain = (
+    {"context": retriever | format_docs, "input": RunnablePassthrough()}
+    | prompt
+    | chat_model
+    | StrOutputParser()
 )
 
 
@@ -144,14 +143,7 @@ def chat():
 
         logger.info("User Message: %s", msg)
 
-        response = rag_chain.invoke({
-            "input": msg
-        })
-
-        answer = response.get(
-            "answer",
-            "Sorry, I could not find an answer."
-        )
+        answer = rag_chain.invoke(msg)
 
         logger.info("Bot Response: %s", answer)
 

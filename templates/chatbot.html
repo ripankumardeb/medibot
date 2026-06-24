@@ -1,11 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Medical AI Assistant</title>
+  <title>MindEase // Mental Health Companion</title>
 
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 
@@ -17,36 +16,36 @@
 
     <aside class="sidebar">
       <div class="brand">
-        <div class="brand-icon">🩺</div>
-        <h1>Medical AI Assistant</h1>
+        <div class="brand-icon">✨</div>
+        <h1>MindEase AI</h1>
         <p>
-          Ask medical reference questions, use voice input, copy answers,
-          and listen to responses in a clean professional chat interface.
+          Your safe space for emotional support, mindfulness exercises, 
+          and mental well-being guidance in a secure, thoughtful chat layout.
         </p>
       </div>
 
       <div class="sidebar-card">
-        <h3>Available Features</h3>
+        <h3>Interactive Tools</h3>
 
         <div class="feature-list">
           <div class="feature-item">
-            <span class="feature-icon">🎙️</span>
-            <span>Voice input using your browser microphone.</span>
+            <span class="feature-icon">💬</span>
+            <span>Voice to text typing for effortless journaling.</span>
           </div>
 
           <div class="feature-item">
-            <span class="feature-icon">🔊</span>
-            <span>Bot answer read aloud with speaker toggle.</span>
+            <span class="feature-icon">🎧</span>
+            <span>Listen along to guided responses and advice.</span>
           </div>
 
           <div class="feature-item">
-            <span class="feature-icon">📋</span>
-            <span>Copy answer and clear chat controls.</span>
+            <span class="feature-icon">🧼</span>
+            <span>Quick-clear active sessions for complete privacy.</span>
           </div>
 
           <div class="feature-item">
             <span class="feature-icon">🌗</span>
-            <span>Light and dark professional UI mode.</span>
+            <span>Soothing light and dark interface configurations.</span>
           </div>
         </div>
       </div>
@@ -56,21 +55,21 @@
 
       <header class="chat-header">
         <div class="assistant-profile">
-          <div class="assistant-avatar">🩺</div>
+          <div class="assistant-avatar">🌱</div>
 
           <div class="assistant-meta">
-            <h2>Medical AI Assistant</h2>
+            <h2>MindEase Guide</h2>
             <div class="status-row">
               <span class="online-dot"></span>
-              <span id="statusText">Online now</span>
+              <span id="statusText">Present with you</span>
             </div>
           </div>
         </div>
 
         <div class="header-actions">
-          <button class="tool-btn" type="button" id="speakerBtn" title="Voice output on/off">🔊</button>
-          <button class="tool-btn" type="button" id="themeBtn" title="Change theme">🌙</button>
-          <button class="tool-btn" type="button" id="clearBtn" title="Clear chat">🧹</button>
+          <button class="tool-btn" type="button" id="speakerBtn" title="Toggle audio readback">🎧</button>
+          <button class="tool-btn" type="button" id="themeBtn" title="Toggle UI color scheme">🌗</button>
+          <button class="tool-btn" type="button" id="clearBtn" title="Wipe chat timeline">🧼</button>
         </div>
       </header>
 
@@ -83,23 +82,23 @@
 
           <div class="message-stack">
             <div class="message bot-message">
-              Hello 👋 I am your medical assistant. Ask me your health-related question by typing or using the microphone.
+              Welcome to a calm space. 🤍 I am here to listen, guide you through mindfulness, or help you unpack your thoughts. What is on your mind today?
             </div>
 
             <div class="message-info">
               <span id="firstTime"></span>
               <div class="message-actions">
-                <button class="mini-action" type="button" onclick="copyText('Hello 👋 I am your medical assistant. Ask me your health-related question by typing or using the microphone.')">Copy</button>
+                <button class="mini-action" type="button" onclick="copyText('Welcome to a calm space. 🤍 I am here to listen, guide you through mindfulness, or help you unpack your thoughts. What is on your mind today?')">Copy</button>
               </div>
             </div>
           </div>
         </div>
 
         <div class="chips">
-          <button class="chip" type="button" onclick="quickMessage('What are the symptoms of fever?')">Fever symptoms</button>
-          <button class="chip" type="button" onclick="quickMessage('What causes headache?')">Headache</button>
-          <button class="chip" type="button" onclick="quickMessage('How to prevent diabetes?')">Diabetes</button>
-          <button class="chip" type="button" onclick="quickMessage('What are common causes of cough?')">Cough</button>
+          <button class="chip" type="button" onclick="quickMessage('Can you guide me through a 2-minute breathing exercise?')">Breathing exercise</button>
+          <button class="chip" type="button" onclick="quickMessage('I am feeling anxious right now, how do I ground myself?')">Anxiety relief</button>
+          <button class="chip" type="button" onclick="quickMessage('Give me a positive morning affirmation')">Morning affirmation</button>
+          <button class="chip" type="button" onclick="quickMessage('Help me reframe negative or stressful thoughts')">Reframing thoughts</button>
         </div>
 
       </div>
@@ -107,30 +106,30 @@
       <div class="voice-banner" id="voiceBanner">
         <div class="voice-banner-content">
           <span class="pulse-dot"></span>
-          <span id="voiceBannerText">Listening... speak now</span>
+          <span id="voiceBannerText">Listening to you... speak freely</span>
         </div>
 
-        <button class="mini-action" type="button" id="stopVoiceBtn">Stop</button>
+        <button class="mini-action" type="button" id="stopVoiceBtn">Cancel</button>
       </div>
 
       <footer class="chat-footer">
         <form class="composer" id="chatForm">
-          <button class="round-btn" type="button" id="micBtn" title="Start voice input">🎙️</button>
+          <button class="round-btn" type="button" id="micBtn" title="Start vocal dictation">🎙️</button>
 
           <textarea
             id="userInput"
             name="msg"
-            placeholder="Type your medical question..."
+            placeholder="Share what you are feeling..."
             autocomplete="off"
             rows="1"
             required
           ></textarea>
 
-          <button class="send-btn" type="submit" id="sendBtn" title="Send message">➤</button>
+          <button class="send-btn" type="submit" id="sendBtn" title="Send text input">✦</button>
         </form>
 
         <div class="footer-meta">
-          <span>This chatbot is for <strong>educational help only</strong>, not a doctor replacement.</span>
+          <span>This guide is for <strong>educational/mindfulness support only</strong>, not a clinical treatment replacement.</span>
           <span id="charCount">0 characters</span>
         </div>
       </footer>
@@ -139,7 +138,7 @@
 
   </main>
 
-  <div class="toast" id="toast">Copied</div>
+  <div class="toast" id="toast">Copied to clipboard</div>
 
   <script>
     const chatForm = document.getElementById("chatForm");
@@ -256,7 +255,7 @@
       const speakButton = document.createElement("button");
       speakButton.className = "mini-action";
       speakButton.type = "button";
-      speakButton.innerText = "Speak";
+      speakButton.innerText = "Listen";
       speakButton.addEventListener("click", () => speakText(message, true));
 
       actions.appendChild(copyButton);
@@ -293,7 +292,7 @@
             <span></span>
           </div>
           <div class="message-info">
-            <span>Thinking...</span>
+            <span>Reflecting...</span>
           </div>
         </div>
       `;
@@ -327,7 +326,7 @@
 
     function speakText(text, forceSpeak) {
       if (!("speechSynthesis" in window)) {
-        showToast("Text-to-speech not supported in this browser");
+        showToast("Audio playbacks are not configured in this browser engine.");
         return;
       }
 
@@ -360,7 +359,7 @@
       }
 
       isSending = true;
-      statusText.innerText = "Generating answer...";
+      statusText.innerText = "Formulating response...";
 
       addUserMessage(cleanMessage);
 
@@ -393,23 +392,23 @@
         removeTypingIndicator();
 
         if (!response.ok) {
-          addBotMessage(data.answer || "Server returned an error. Please try again.");
+          addBotMessage(data.answer || "Processing anomaly on our end. Let's try again.");
         } else if (data.success) {
-          addBotMessage(data.answer || "Sorry, I could not find an answer.");
+          addBotMessage(data.answer || "I am processing your text, but couldn't finalize a response.");
         } else {
           addBotMessage(data.answer || "Something went wrong. Please try again.");
         }
 
       } catch (error) {
         removeTypingIndicator();
-        addBotMessage("Server connection failed. Please check your Flask app and make sure it is running on the same port.");
+        addBotMessage("Connection dropped. Ensure your local framework server endpoint is listening.");
         console.error(error);
       }
 
       isSending = false;
       sendBtn.disabled = false;
       micBtn.disabled = false;
-      statusText.innerText = "Online now";
+      statusText.innerText = "Present with you";
       userInput.focus();
     }
 
@@ -433,7 +432,7 @@
         return;
       }
 
-      showToast("Chat cleared");
+      showToast("Timeline reset");
       scrollToBottom();
     }
 
@@ -442,7 +441,7 @@
 
       if (!SpeechRecognition) {
         micBtn.disabled = true;
-        micBtn.title = "Voice input is not supported in this browser";
+        micBtn.title = "Voice captures are unsupported within this browser platform.";
         return;
       }
 
@@ -455,8 +454,8 @@
         isListening = true;
         micBtn.classList.add("active");
         voiceBanner.classList.add("show");
-        voiceBannerText.innerText = "Listening... speak now";
-        statusText.innerText = "Listening...";
+        voiceBannerText.innerText = "Listening to you... speak freely";
+        statusText.innerText = "Capturing voice...";
       };
 
       recognition.onresult = function (event) {
@@ -482,7 +481,7 @@
         }
 
         if (finalTranscript.trim()) {
-          voiceBannerText.innerText = "Voice captured. Sending...";
+          voiceBannerText.innerText = "Input logged. Sending...";
           setTimeout(() => {
             sendMessage(finalTranscript.trim());
           }, 350);
@@ -493,12 +492,12 @@
         isListening = false;
         micBtn.classList.remove("active");
         voiceBanner.classList.remove("show");
-        statusText.innerText = "Online now";
+        statusText.innerText = "Present with you";
 
         if (event.error === "not-allowed") {
-          showToast("Microphone permission denied");
+          showToast("Microphone permissions rejected");
         } else {
-          showToast("Voice input stopped");
+          showToast("Microphone deactivated");
         }
       };
 
@@ -508,14 +507,14 @@
         voiceBanner.classList.remove("show");
 
         if (!isSending) {
-          statusText.innerText = "Online now";
+          statusText.innerText = "Present with you";
         }
       };
     }
 
     function toggleMic() {
       if (!recognition) {
-        showToast("Voice input not supported in this browser");
+        showToast("Voice features are unsupported here");
         return;
       }
 
@@ -557,13 +556,13 @@
 
       if (speakerEnabled) {
         speakerBtn.classList.add("active");
-        speakerBtn.innerText = "🔊";
-        showToast("Voice output on");
+        speakerBtn.innerText = "🎧";
+        showToast("Audio response activated");
       } else {
         speakerBtn.classList.remove("active");
         speakerBtn.innerText = "🔇";
         stopSpeaking();
-        showToast("Voice output off");
+        showToast("Audio muted");
       }
     });
 
@@ -573,12 +572,12 @@
 
       if (isDark) {
         body.setAttribute("data-theme", "light");
-        themeBtn.innerText = "🌙";
-        showToast("Light mode enabled");
+        themeBtn.innerText = "🌗";
+        showToast("Bright mode activated");
       } else {
         body.setAttribute("data-theme", "dark");
-        themeBtn.innerText = "☀️";
-        showToast("Dark mode enabled");
+        themeBtn.innerText = "🌗";
+        showToast("Dim mode activated");
       }
     });
 
