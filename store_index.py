@@ -11,15 +11,15 @@ from langchain_pinecone import PineconeVectorStore
 load_dotenv()
 
 PINECONE_API_KEY=os.getenv("PINECONE_API_KEY")
-OPENAI_API_KEY=os.getenv("OPENAI_API_KEY")
+# OPENAI_API_KEY=os.getenv("OPENAI_API_KEY")
 
 if not PINECONE_API_KEY:
     raise ValueError("PINECONE_API_KEY is missing in .env file")
 
 os.environ["PINECONE_API_KEY"] = PINECONE_API_KEY
 
-if OPENAI_API_KEY:
-    os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
+# if OPENAI_API_KEY:
+#     os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
 
     
 extracted_data =load_pdf_files(data='data/')

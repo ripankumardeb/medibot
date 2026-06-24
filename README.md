@@ -22,6 +22,7 @@ The app runs locally on port **8080** and can be accessed from any browser on th
 # 1️⃣  Navigate to the project folder
 cd "C:\Users\ripan\Documents\internship\medibot"
 
+<<<<<<< HEAD
 # 2️⃣  (Optional) Create a virtual environment
 python -m venv venv
 
@@ -98,3 +99,8 @@ This project is provided under the **MIT License**. See `LICENSE` for details.
 - **Sentence‑Transformers** – Embedding model
 
 Enjoy building with Medibot! 🎉
+=======
+#pip install -r requirements.txt
+
+#794285266297.dkr.ecr.ap-southeast-2.amazonaws.com/medibot
+>>>>>>> 8ca0750a32f2a8d0224a3cc61a0617668648699e
