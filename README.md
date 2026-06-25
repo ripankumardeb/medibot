@@ -122,4 +122,4 @@ This project is provided under the **Apache License 2.0**. See `LICENSE` for det
 - **Ollama** – Local LLM serving
 - **Sentence‑Transformers** – Embedding model
 
-Enjoy building with Medibot! 🎉
+Enjoy building with Medibot! 🎉🎉
