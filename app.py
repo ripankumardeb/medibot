@@ -1,11 +1,10 @@
 from flask import Flask, render_template, jsonify, request
 from dotenv import load_dotenv
 
-from src.helper import download_embeddings
+from src.helper import download_embeddings, get_llm
 from src.prompt import system_prompt
 
 from langchain_pinecone import PineconeVectorStore
-from langchain_ollama import ChatOllama
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
@@ -76,11 +75,8 @@ retriever = docsearch.as_retriever(
 )
 
 
-logger.info("Loading Ollama model: %s", MODEL_NAME)
-chat_model = ChatOllama(
-    model=MODEL_NAME,
-    temperature=0.2
-)
+logger.info("Loading HF model...")
+chat_model = get_llm()
 
 
 prompt = ChatPromptTemplate.from_messages(
