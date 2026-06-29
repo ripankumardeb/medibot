@@ -1,0 +1,22 @@
+# Ignore local Python environment and Git data
+venv/
+.git/
+
+# Ignore large local data and research folders not needed for deployment
+data/
+research/
+medibot.egg-info/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore local environment files and tooling artifacts
+.env
+uv.lock
+.refact/
+.DS_Store
+
+# Ignore files only needed for local development or build configuration
+Dockerfile
+README.md
