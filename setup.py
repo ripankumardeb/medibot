@@ -6,5 +6,6 @@ setup(
     author="RipnaKumarDeb",
     author_email="ripankumar123cj7@gmail.com",
     packages=find_packages(),
-    install_requires=[]
+    install_requires=[],
+    python_requires=">=3.9,<3.15"
 )

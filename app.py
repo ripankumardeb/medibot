@@ -1,7 +1,9 @@
 from flask import Flask, render_template, jsonify, request
 from dotenv import load_dotenv
 
-from src.helper import download_embeddings, get_llm
+from pinecone import Pinecone
+
+from src.helper import download_embeddings, ensure_pinecone_index, get_llm
 from src.prompt import system_prompt
 
 from langchain_pinecone import PineconeVectorStore
@@ -39,30 +41,41 @@ logger = logging.getLogger(__name__)
 load_dotenv()
 
 PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
-#OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+HF_TOKEN = os.getenv("HF_TOKEN")
 
 if not PINECONE_API_KEY:
     raise ValueError("PINECONE_API_KEY is missing in .env file.")
 
 os.environ["PINECONE_API_KEY"] = PINECONE_API_KEY
 
-# if OPENAI_API_KEY:
-#     os.environ["OPENAI_API_KEY"] = OPENAI_API_KEY
+# Authenticate Hugging Face Hub downloads. Anonymous requests to the Hub are
+# rate-limited, which is a common source of intermittent failures the first
+# time the embedding model has to be downloaded/re-downloaded.
+if HF_TOKEN:
+    os.environ["HF_TOKEN"] = HF_TOKEN
+    os.environ["HUGGINGFACEHUB_API_TOKEN"] = HF_TOKEN
+else:
+    logging.getLogger(__name__).warning(
+        "HF_TOKEN not set in .env - Hugging Face Hub downloads will be "
+        "unauthenticated and may be rate-limited."
+    )
 
 
 # ---------------------------------------------------------
 # RAG Setup (Modern LCEL — Python 3.14 compatible)
 # ---------------------------------------------------------
 
-INDEX_NAME = "medical-chatbot"
 MODEL_NAME = "llama3.2:3b"
 
 
 logger.info("Loading embeddings...")
 embeddings = download_embeddings()
-
+embedding_dimension = embeddings.get_embedding_dimension()
+INDEX_NAME = os.getenv("PINECONE_INDEX_NAME", f"medical-chatbot-{embedding_dimension}")
 
 logger.info("Connecting to Pinecone index: %s", INDEX_NAME)
+pc = Pinecone(api_key=PINECONE_API_KEY)
+ensure_pinecone_index(pc, INDEX_NAME, embedding_dimension)
 docsearch = PineconeVectorStore.from_existing_index(
     index_name=INDEX_NAME,
     embedding=embeddings
@@ -147,6 +160,22 @@ def chat():
             "success": True,
             "answer": answer
         })
+
+    except ConnectionError as e:
+        # Raised by OllamaLocalLLM when the local Ollama server can't be
+        # reached after retries. This is a very common intermittent failure:
+        # Ollama isn't running, is still starting up, or is loading the model
+        # into memory for the first time.
+        logger.exception("Ollama connection error: %s", str(e))
+
+        return jsonify({
+            "success": False,
+            "answer": (
+                "The AI model server (Ollama) isn't reachable right now. "
+                "Make sure it's running (`ollama serve`) and that the model "
+                "has been pulled, then try again."
+            )
+        }), 503
 
     except Exception as e:
         logger.exception("Chat Error: %s", str(e))

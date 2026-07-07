@@ -99,6 +99,7 @@ jobs:
             --restart always \
             --network host \
             -e PINECONE_API_KEY="${{ secrets.PINECONE_API_KEY }}" \
+            -e HF_TOKEN="${{ secrets.HF_TOKEN }}" \
             "$IMAGE_URI"
 
       - name: Check running container

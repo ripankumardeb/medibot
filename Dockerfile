@@ -17,7 +17,13 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY app.py .
 COPY templates ./templates
 COPY static ./static
+COPY entrypoint.sh .
+RUN chmod +x entrypoint.sh
 
 EXPOSE 8080
 
-CMD ["gunicorn", "--workers", "1", "--threads", "4", "--timeout", "180", "--bind", "0.0.0.0:8080", "app:app"]
+# NOTE: This image does not include Ollama. It must be running separately
+# and reachable at OLLAMA_BASE_URL (defaults to http://localhost:11434,
+# which works when the container is run with --network host on a machine
+# that already has `ollama serve` running with the model pulled).
+CMD ["./entrypoint.sh"]

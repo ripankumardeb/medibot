@@ -1,10 +1,9 @@
 from dotenv import load_dotenv
 import os
 
-from src.helper import load_pdf_files,filter_to_minimal_docs, text_split ,download_embeddings
+from src.helper import load_pdf_files, filter_to_minimal_docs, text_split, download_embeddings, ensure_pinecone_index
 
 from pinecone import Pinecone
-from pinecone import ServerlessSpec
 
 from langchain_pinecone import PineconeVectorStore
 
@@ -27,19 +26,13 @@ filter_data=filter_to_minimal_docs(extracted_data)
 text_chunks=text_split(filter_data)
 
 embeddings = download_embeddings()
+embedding_dimension = embeddings.get_embedding_dimension()
 
 pinecone_api_key = PINECONE_API_KEY
 pc = Pinecone(api_key=pinecone_api_key)
 
-index_name = "medical-chatbot"
-
-if not pc.has_index(index_name):
-    pc.create_index(
-        name=index_name,
-        dimension=384,
-        metric="cosine",
-        spec = ServerlessSpec(cloud = "aws", region="us-east-1"),
-    )
+index_name = os.getenv("PINECONE_INDEX_NAME", f"medical-chatbot-{embedding_dimension}")
+ensure_pinecone_index(pc, index_name, embedding_dimension)
 
 index = pc.Index(index_name)
 
